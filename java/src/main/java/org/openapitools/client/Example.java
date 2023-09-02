@@ -1,10 +1,9 @@
 package org.openapitools.client;
 
+import java.math.BigDecimal;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import org.openapitools.client.api.DataDictionariesOrderBooksApi;
 import org.openapitools.client.api.DataDictionariesTradesApi;
@@ -21,18 +20,29 @@ public class Example {
       int size = 100;
       int page = 0;
       boolean hasNext = true;
-      List<String> markets = new ArrayList<>();
+      TreeMap<BigDecimal, List<String>> sortedMap = new TreeMap<>();
       while (hasNext) {
         PageWrapperTradeMarketDto pageWrapperTradeMarketDto =
-            tradesApi.tradeMarkets(true, null, null, "spot", "binance", null, true, page, size);
-        pageWrapperTradeMarketDto.getContent().stream()
-            .filter(
-                tradeMarketDto ->
-                    Optional.ofNullable(tradeMarketDto.getMetrics())
-                        .flatMap(map -> Optional.ofNullable(map.get("1h")))
-                        .filter(metrics -> metrics.getTrades() >= 3)
-                        .isPresent())
-            .forEach(tradeMarketDto -> markets.add(tradeMarketDto.getMarket().getId()));
+            tradesApi.tradeMarkets(true, "btc", "usd", "spot", null, null, true, page, size);
+        pageWrapperTradeMarketDto
+            .getContent()
+            .forEach(
+                tradeMarketDto -> {
+                  BigDecimal vwap =
+                      Optional.ofNullable(tradeMarketDto.getMetrics())
+                          .flatMap(
+                              map ->
+                                  Optional.ofNullable(map.get("1h")).map(TradeMetricsDto::getVwap))
+                          .map(BigDecimal::new)
+                          .orElse(BigDecimal.valueOf(Integer.MIN_VALUE));
+                  sortedMap.compute(
+                      vwap,
+                      (key, value) -> {
+                        List<String> marketVenues = value == null ? new ArrayList<>() : value;
+                        marketVenues.add(tradeMarketDto.getMarket().getMarketVenue());
+                        return marketVenues;
+                      });
+                });
         hasNext = pageWrapperTradeMarketDto.getHasNext();
         page++;
       }

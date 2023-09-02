@@ -91,4 +91,31 @@ while (hasNext) {
     page++;
 }
 ```
+6. Find all market venues where btc-usd pair traded, sort them by vwap
+```java
+int size = 100;
+int page = 0;
+boolean hasNext = true;
+TreeMap<BigDecimal, List<String>> sortedMap = new TreeMap<>();
+while (hasNext) {
+    PageWrapperTradeMarketDto pageWrapperTradeMarketDto =
+        tradesApi.tradeMarkets(true, "btc", "usd", "spot", null, null, true, page, size);
+    pageWrapperTradeMarketDto
+        .getContent()
+        .forEach(tradeMarketDto -> {
+            BigDecimal vwap = Optional.ofNullable(tradeMarketDto.getMetrics())
+                .flatMap(map ->
+                    Optional.ofNullable(map.get("1h")).map(TradeMetricsDto::getVwap))
+                        .map(BigDecimal::new)
+                        .orElse(BigDecimal.valueOf(Integer.MIN_VALUE));
+            sortedMap.compute(vwap, (key, value) -> {
+                List<String> marketVenues = value == null ? new ArrayList<>() : value;
+                marketVenues.add(tradeMarketDto.getMarket().getMarketVenue());
+                return marketVenues;
+            });
+        });
+    hasNext = pageWrapperTradeMarketDto.getHasNext();
+    page++;
+}
+```
 
