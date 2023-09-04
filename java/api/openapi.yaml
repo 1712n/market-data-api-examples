@@ -1,0 +1,1398 @@
+openapi: 3.0.1
+info:
+  title: OpenAPI definition
+  version: v0
+servers:
+- description: Generated server url
+  url: https://api.financial.inca.digital
+tags:
+- description: "List of supported markets, pairs, marketvenues and assets for MBBO\
+    \ and GBBO endpoints"
+  name: Data Dictionaries Order Books
+- description: "List of supported markets, pairs, market-venues and assets for trades\
+    \ and trade metrics endpoints"
+  name: Data Dictionaries Trades
+paths:
+  /dictionaries/v2/trades/pairs:
+    get:
+      operationId: tradePairs
+      parameters:
+      - description: "Activity status filter. The pair is considered inactive if we\
+          \ stop receiving messages for it. In case we receive a message from an inactive\
+          \ pair, we flag it as active again."
+        explode: true
+        in: query
+        name: active
+        required: false
+        schema:
+          type: boolean
+        style: form
+      - description: "Asset symbol filter. The first listed currency of a currency\
+          \ pair, they are usually cryptocurrency tokens. The most diverse parameter"
+        explode: true
+        in: query
+        name: symbol
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: "Asset base filter. The second listed currency in the pair, also\
+          \ known as quote currency or counter currency. Usually fiat, stablecoin,\
+          \ or more popular crypto like BTC and ETH. The less diverse parameter"
+        explode: true
+        in: query
+        name: base
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: "Filter by type of the asset. Possible values are: 'spot', 'future'\
+          \ or 'option'"
+        explode: true
+        in: query
+        name: asset-type
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: Page number of items to start with (0..N)
+        explode: true
+        in: query
+        name: page
+        required: false
+        schema:
+          default: 0
+          minimum: 0
+          type: integer
+        style: form
+      - description: Number of elements to return per page
+        explode: true
+        in: query
+        name: size
+        required: false
+        schema:
+          default: 1000
+          maximum: 5000
+          minimum: 1
+          type: integer
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PageWrapperTradePairDto'
+          description: OK
+      summary: Get pairs
+      tags:
+      - Data Dictionaries Trades
+      x-accepts: application/json
+  /dictionaries/v2/trades/markets:
+    get:
+      operationId: tradeMarkets
+      parameters:
+      - description: "Activity status filter. The market is considered inactive if\
+          \ we stop receiving messages for it. In case we receive a message from an\
+          \ inactive market, we flag it as active again."
+        explode: true
+        in: query
+        name: active
+        required: false
+        schema:
+          type: boolean
+        style: form
+      - description: "Asset symbol filter. The first listed currency of a currency\
+          \ pair, they are usually cryptocurrency tokens. The most diverse parameter"
+        explode: true
+        in: query
+        name: symbol
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: "Asset base filter. The second listed currency in the pair, also\
+          \ known as quote currency or counter currency. Usually fiat, stablecoin,\
+          \ or more popular crypto like BTC and ETH. The less diverse parameter"
+        explode: true
+        in: query
+        name: base
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: "Filter by type of the asset. Possible values are: 'spot', 'future'\
+          \ or 'option'"
+        explode: true
+        in: query
+        name: asset-type
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: Filter by market venue
+        explode: true
+        in: query
+        name: market-venue
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: Filter by pair unique identifier
+        explode: true
+        in: query
+        name: pair-id
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: Weather include pair details to response
+        explode: true
+        in: query
+        name: verbose
+        required: false
+        schema:
+          default: false
+          type: boolean
+        style: form
+      - description: Page number of items to start with (0..N)
+        explode: true
+        in: query
+        name: page
+        required: false
+        schema:
+          default: 0
+          minimum: 0
+          type: integer
+        style: form
+      - description: Number of elements to return per page
+        explode: true
+        in: query
+        name: size
+        required: false
+        schema:
+          default: 1000
+          maximum: 5000
+          minimum: 1
+          type: integer
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PageWrapperTradeMarketDto'
+          description: OK
+      summary: Get markets
+      tags:
+      - Data Dictionaries Trades
+      x-accepts: application/json
+  /dictionaries/v2/trades/market-venues:
+    get:
+      operationId: tradeMarketVenues
+      parameters:
+      - description: "Activity status filter. The market is considered inactive if\
+          \ we stop receiving messages for it. In case we receive a message from an\
+          \ inactive market, we flag it as active again."
+        explode: true
+        in: query
+        name: active
+        required: false
+        schema:
+          type: boolean
+        style: form
+      - description: Page number of items to start with (0..N)
+        explode: true
+        in: query
+        name: page
+        required: false
+        schema:
+          default: 0
+          minimum: 0
+          type: integer
+        style: form
+      - description: Number of elements to return per page
+        explode: true
+        in: query
+        name: size
+        required: false
+        schema:
+          default: 1000
+          maximum: 5000
+          minimum: 1
+          type: integer
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PageWrapperMarketVenueDto'
+          description: OK
+      summary: Get market-venues
+      tags:
+      - Data Dictionaries Trades
+      x-accepts: application/json
+  /dictionaries/v2/trades/assets:
+    get:
+      operationId: tradeAssets
+      parameters:
+      - description: Page number of items to start with (0..N)
+        explode: true
+        in: query
+        name: page
+        required: false
+        schema:
+          default: 0
+          minimum: 0
+          type: integer
+        style: form
+      - description: Number of elements to return per page
+        explode: true
+        in: query
+        name: size
+        required: false
+        schema:
+          default: 1000
+          maximum: 5000
+          minimum: 1
+          type: integer
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PageWrapperAssetDto'
+          description: OK
+      summary: Get assets
+      tags:
+      - Data Dictionaries Trades
+      x-accepts: application/json
+  /dictionaries/v2/order-books/pairs:
+    get:
+      operationId: orderBookPairs
+      parameters:
+      - description: "Activity status filter. The pair is considered inactive if we\
+          \ stop receiving messages for it. In case we receive a message from an inactive\
+          \ pair, we flag it as active again."
+        explode: true
+        in: query
+        name: active
+        required: false
+        schema:
+          type: boolean
+        style: form
+      - description: "Asset symbol filter. The first listed currency of a currency\
+          \ pair, they are usually cryptocurrency tokens. The most diverse parameter"
+        explode: true
+        in: query
+        name: symbol
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: "Asset base filter. The second listed currency in the pair, also\
+          \ known as quote currency or counter currency. Usually fiat, stablecoin,\
+          \ or more popular crypto like BTC and ETH. The less diverse parameter"
+        explode: true
+        in: query
+        name: base
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: "Filter by type of the asset. Possible values are: 'spot', 'future'\
+          \ or 'option'"
+        explode: true
+        in: query
+        name: asset-type
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: Page number of items to start with (0..N)
+        explode: true
+        in: query
+        name: page
+        required: false
+        schema:
+          default: 0
+          minimum: 0
+          type: integer
+        style: form
+      - description: Number of elements to return per page
+        explode: true
+        in: query
+        name: size
+        required: false
+        schema:
+          default: 1000
+          maximum: 5000
+          minimum: 1
+          type: integer
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PageWrapperObPairDto'
+          description: OK
+      summary: Get pairs
+      tags:
+      - Data Dictionaries Order Books
+      x-accepts: application/json
+  /dictionaries/v2/order-books/markets:
+    get:
+      operationId: orderBookMarkets
+      parameters:
+      - description: "Activity status filter. The market is considered inactive if\
+          \ we stop receiving messages for it. In case we receive a message from an\
+          \ inactive market, we flag it as active again."
+        explode: true
+        in: query
+        name: active
+        required: false
+        schema:
+          type: boolean
+        style: form
+      - description: "Asset symbol filter. The first listed currency of a currency\
+          \ pair, they are usually cryptocurrency tokens. The most diverse parameter"
+        explode: true
+        in: query
+        name: symbol
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: "Asset base filter. The second listed currency in the pair, also\
+          \ known as quote currency or counter currency. Usually fiat, stablecoin,\
+          \ or more popular crypto like BTC and ETH. The less diverse parameter"
+        explode: true
+        in: query
+        name: base
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: "Filter by type of the asset. Possible values are: 'spot', 'future'\
+          \ or 'option'"
+        explode: true
+        in: query
+        name: asset-type
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: Filter by market venue
+        explode: true
+        in: query
+        name: market-venue
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: Filter by pair unique identifier
+        explode: true
+        in: query
+        name: pair-id
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: Weather include pair details to response
+        explode: true
+        in: query
+        name: verbose
+        required: false
+        schema:
+          default: false
+          type: boolean
+        style: form
+      - description: Page number of items to start with (0..N)
+        explode: true
+        in: query
+        name: page
+        required: false
+        schema:
+          default: 0
+          minimum: 0
+          type: integer
+        style: form
+      - description: Number of elements to return per page
+        explode: true
+        in: query
+        name: size
+        required: false
+        schema:
+          default: 1000
+          maximum: 5000
+          minimum: 1
+          type: integer
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PageWrapperObMarketDto'
+          description: OK
+      summary: Get markets
+      tags:
+      - Data Dictionaries Order Books
+      x-accepts: application/json
+  /dictionaries/v2/order-books/market-venues:
+    get:
+      operationId: orderBookMarketVenues
+      parameters:
+      - description: "Activity status filter. The market venue is considered inactive\
+          \ if we stop receiving messages for it. In case we receive a message from\
+          \ an inactive market venue, we flag it as active again."
+        explode: true
+        in: query
+        name: active
+        required: false
+        schema:
+          type: boolean
+        style: form
+      - description: Page number of items to start with (0..N)
+        explode: true
+        in: query
+        name: page
+        required: false
+        schema:
+          default: 0
+          minimum: 0
+          type: integer
+        style: form
+      - description: Number of elements to return per page
+        explode: true
+        in: query
+        name: size
+        required: false
+        schema:
+          default: 1000
+          maximum: 5000
+          minimum: 1
+          type: integer
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PageWrapperMarketVenueDto'
+          description: OK
+      summary: Get market-venues
+      tags:
+      - Data Dictionaries Order Books
+      x-accepts: application/json
+  /dictionaries/v2/order-books/assets:
+    get:
+      operationId: orderBookAssets
+      parameters:
+      - description: Page number of items to start with (0..N)
+        explode: true
+        in: query
+        name: page
+        required: false
+        schema:
+          default: 0
+          minimum: 0
+          type: integer
+        style: form
+      - description: Number of elements to return per page
+        explode: true
+        in: query
+        name: size
+        required: false
+        schema:
+          default: 1000
+          maximum: 5000
+          minimum: 1
+          type: integer
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PageWrapperAssetDto'
+          description: OK
+      summary: Get assets
+      tags:
+      - Data Dictionaries Order Books
+      x-accepts: application/json
+components:
+  schemas:
+    PageWrapperTradePairDto:
+      example:
+        size: 0
+        numberOfElements: 5
+        totalPages: 6
+        hasNext: true
+        page: 5
+        content:
+        - lastSeen: lastSeen
+          firstSeen: firstSeen
+          active: true
+          pair:
+            optionType: optionType
+            optionStrike: optionStrike
+            symbol: symbol
+            futureDeliveryDate: futureDeliveryDate
+            optionExpiration: optionExpiration
+            id: id
+            optionDeliveryDate: optionDeliveryDate
+            assetType: assetType
+            base: base
+        - lastSeen: lastSeen
+          firstSeen: firstSeen
+          active: true
+          pair:
+            optionType: optionType
+            optionStrike: optionStrike
+            symbol: symbol
+            futureDeliveryDate: futureDeliveryDate
+            optionExpiration: optionExpiration
+            id: id
+            optionDeliveryDate: optionDeliveryDate
+            assetType: assetType
+            base: base
+        totalElements: 1
+      properties:
+        content:
+          description: Dictionary elements
+          items:
+            $ref: '#/components/schemas/TradePairDto'
+          type: array
+        size:
+          description: Number of requested elements
+          format: int32
+          type: integer
+        totalPages:
+          description: Total pages of dictionary
+          format: int32
+          type: integer
+        totalElements:
+          description: Total elements
+          format: int64
+          type: integer
+        numberOfElements:
+          description: The number of elements on page
+          format: int32
+          type: integer
+        page:
+          description: Current page number
+          format: int32
+          type: integer
+        hasNext:
+          description: Whether it has more pages or not
+          type: boolean
+      required:
+      - content
+      - hasNext
+      - numberOfElements
+      - page
+      - size
+      - totalElements
+      - totalPages
+      type: object
+    PairDto:
+      description: Pair is a combination of base and quote currencies; the value of
+        one currency being quoted against the other
+      example:
+        optionType: optionType
+        optionStrike: optionStrike
+        symbol: symbol
+        futureDeliveryDate: futureDeliveryDate
+        optionExpiration: optionExpiration
+        id: id
+        optionDeliveryDate: optionDeliveryDate
+        assetType: assetType
+        base: base
+      properties:
+        id:
+          description: Unique identifier
+          type: string
+        assetType:
+          description: "The type of asset. Spot, future, and option are the main asset\
+            \ types we are covering with financial data. Futures and options are derivatives"
+          type: string
+        symbol:
+          description: "The first listed currency of a currency pair, they are usually\
+            \ cryptocurrency tokens. The most diverse parameter"
+          type: string
+        base:
+          description: "The second listed currency in the pair, also known as quote\
+            \ currency or counter currency. Usually fiat, stablecoin, or more popular\
+            \ crypto like BTC and ETH. The less diverse parameter"
+          type: string
+        futureDeliveryDate:
+          description: The last day that a future contract is valid
+          type: string
+        optionType:
+          description: Refers to the holder’s right to sell/buy a number of assets
+            within a specific period of time at a certain price. This takes two values:put
+            for sell and call for buy
+          type: string
+        optionExpiration:
+          description: The options’ lifespan. This takes two values:eu (may be exercised
+            only at the expiration date) and am (may be exercised at any time before
+            the expiration date)
+          type: string
+        optionStrike:
+          description: The price at which option contract can be exercised
+          type: string
+        optionDeliveryDate:
+          description: The last day that an option is valid
+          type: string
+      required:
+      - assetType
+      - base
+      - id
+      - symbol
+      type: object
+    TradePairDto:
+      description: Dictionary elements
+      example:
+        lastSeen: lastSeen
+        firstSeen: firstSeen
+        active: true
+        pair:
+          optionType: optionType
+          optionStrike: optionStrike
+          symbol: symbol
+          futureDeliveryDate: futureDeliveryDate
+          optionExpiration: optionExpiration
+          id: id
+          optionDeliveryDate: optionDeliveryDate
+          assetType: assetType
+          base: base
+      properties:
+        pair:
+          $ref: '#/components/schemas/PairDto'
+        active:
+          description: Shows whether the object is still active or not
+          type: boolean
+        firstSeen:
+          description: The date and time of first event with pair
+          type: string
+        lastSeen:
+          description: The date and time of last event with pair
+          type: string
+      required:
+      - pair
+      type: object
+    MarketDto:
+      description: Market is a combination of marketVenue and pair
+      example:
+        pairId: pairId
+        id: id
+        marketVenue: marketVenue
+        pair:
+          optionType: optionType
+          optionStrike: optionStrike
+          symbol: symbol
+          futureDeliveryDate: futureDeliveryDate
+          optionExpiration: optionExpiration
+          id: id
+          optionDeliveryDate: optionDeliveryDate
+          assetType: assetType
+          base: base
+      properties:
+        id:
+          description: Unique identifier
+          type: string
+        marketVenue:
+          description: Market venue (unique identifier)
+          type: string
+        pairId:
+          description: Pair (unique identifier)
+          type: string
+        pair:
+          $ref: '#/components/schemas/PairDto'
+      required:
+      - id
+      - marketVenue
+      - pairId
+      type: object
+    PageWrapperTradeMarketDto:
+      example:
+        size: 6
+        numberOfElements: 5
+        totalPages: 1
+        hasNext: true
+        page: 2
+        content:
+        - market:
+            pairId: pairId
+            id: id
+            marketVenue: marketVenue
+            pair:
+              optionType: optionType
+              optionStrike: optionStrike
+              symbol: symbol
+              futureDeliveryDate: futureDeliveryDate
+              optionExpiration: optionExpiration
+              id: id
+              optionDeliveryDate: optionDeliveryDate
+              assetType: assetType
+              base: base
+          lastSeen: lastSeen
+          firstSeen: firstSeen
+          active: true
+          metrics:
+            key:
+              volume: volume
+              price: price
+              vwap: vwap
+              trades: 0
+        - market:
+            pairId: pairId
+            id: id
+            marketVenue: marketVenue
+            pair:
+              optionType: optionType
+              optionStrike: optionStrike
+              symbol: symbol
+              futureDeliveryDate: futureDeliveryDate
+              optionExpiration: optionExpiration
+              id: id
+              optionDeliveryDate: optionDeliveryDate
+              assetType: assetType
+              base: base
+          lastSeen: lastSeen
+          firstSeen: firstSeen
+          active: true
+          metrics:
+            key:
+              volume: volume
+              price: price
+              vwap: vwap
+              trades: 0
+        totalElements: 5
+      properties:
+        content:
+          description: Dictionary elements
+          items:
+            $ref: '#/components/schemas/TradeMarketDto'
+          type: array
+        size:
+          description: Number of requested elements
+          format: int32
+          type: integer
+        totalPages:
+          description: Total pages of dictionary
+          format: int32
+          type: integer
+        totalElements:
+          description: Total elements
+          format: int64
+          type: integer
+        numberOfElements:
+          description: The number of elements on page
+          format: int32
+          type: integer
+        page:
+          description: Current page number
+          format: int32
+          type: integer
+        hasNext:
+          description: Whether it has more pages or not
+          type: boolean
+      required:
+      - content
+      - hasNext
+      - numberOfElements
+      - page
+      - size
+      - totalElements
+      - totalPages
+      type: object
+    TradeMarketDto:
+      description: Dictionary elements
+      example:
+        market:
+          pairId: pairId
+          id: id
+          marketVenue: marketVenue
+          pair:
+            optionType: optionType
+            optionStrike: optionStrike
+            symbol: symbol
+            futureDeliveryDate: futureDeliveryDate
+            optionExpiration: optionExpiration
+            id: id
+            optionDeliveryDate: optionDeliveryDate
+            assetType: assetType
+            base: base
+        lastSeen: lastSeen
+        firstSeen: firstSeen
+        active: true
+        metrics:
+          key:
+            volume: volume
+            price: price
+            vwap: vwap
+            trades: 0
+      properties:
+        market:
+          $ref: '#/components/schemas/MarketDto'
+        active:
+          description: Shows whether the object is still active or not
+          type: boolean
+        firstSeen:
+          description: The date and time of first event on market
+          type: string
+        lastSeen:
+          description: The date and time of last event on market
+          type: string
+        metrics:
+          additionalProperties:
+            $ref: '#/components/schemas/TradeMetricsDto'
+          description: Metrics associated with object
+          type: object
+      required:
+      - active
+      - market
+      type: object
+    TradeMetricsDto:
+      description: Metrics associated with object
+      example:
+        volume: volume
+        price: price
+        vwap: vwap
+        trades: 0
+      properties:
+        price:
+          type: string
+        volume:
+          type: string
+        trades:
+          description: Total amount of executed trades
+          format: int64
+          type: integer
+        vwap:
+          type: string
+      required:
+      - price
+      - trades
+      - volume
+      - vwap
+      type: object
+    MarketVenueDto:
+      description: Market venue
+      example:
+        lastSeen: lastSeen
+        firstSeen: firstSeen
+        name: name
+        active: true
+      properties:
+        name:
+          description: The name of exchange or venue
+          type: string
+        active:
+          description: Shows whether the object is still active or not
+          type: boolean
+        firstSeen:
+          description: The date and time of first event on market venue
+          type: string
+        lastSeen:
+          description: The date and time of last event on market venue
+          type: string
+      required:
+      - active
+      - name
+      type: object
+    PageWrapperMarketVenueDto:
+      example:
+        size: 0
+        numberOfElements: 5
+        totalPages: 6
+        hasNext: true
+        page: 5
+        content:
+        - lastSeen: lastSeen
+          firstSeen: firstSeen
+          name: name
+          active: true
+        - lastSeen: lastSeen
+          firstSeen: firstSeen
+          name: name
+          active: true
+        totalElements: 1
+      properties:
+        content:
+          description: Dictionary elements
+          items:
+            $ref: '#/components/schemas/MarketVenueDto'
+          type: array
+        size:
+          description: Number of requested elements
+          format: int32
+          type: integer
+        totalPages:
+          description: Total pages of dictionary
+          format: int32
+          type: integer
+        totalElements:
+          description: Total elements
+          format: int64
+          type: integer
+        numberOfElements:
+          description: The number of elements on page
+          format: int32
+          type: integer
+        page:
+          description: Current page number
+          format: int32
+          type: integer
+        hasNext:
+          description: Whether it has more pages or not
+          type: boolean
+      required:
+      - content
+      - hasNext
+      - numberOfElements
+      - page
+      - size
+      - totalElements
+      - totalPages
+      type: object
+    AssetDto:
+      description: Asset
+      example:
+        id: id
+      properties:
+        id:
+          description: Unique identifier
+          type: string
+      required:
+      - id
+      type: object
+    PageWrapperAssetDto:
+      example:
+        size: 0
+        numberOfElements: 5
+        totalPages: 6
+        hasNext: true
+        page: 5
+        content:
+        - id: id
+        - id: id
+        totalElements: 1
+      properties:
+        content:
+          description: Dictionary elements
+          items:
+            $ref: '#/components/schemas/AssetDto'
+          type: array
+        size:
+          description: Number of requested elements
+          format: int32
+          type: integer
+        totalPages:
+          description: Total pages of dictionary
+          format: int32
+          type: integer
+        totalElements:
+          description: Total elements
+          format: int64
+          type: integer
+        numberOfElements:
+          description: The number of elements on page
+          format: int32
+          type: integer
+        page:
+          description: Current page number
+          format: int32
+          type: integer
+        hasNext:
+          description: Whether it has more pages or not
+          type: boolean
+      required:
+      - content
+      - hasNext
+      - numberOfElements
+      - page
+      - size
+      - totalElements
+      - totalPages
+      type: object
+    BestOfferDto:
+      description: The metrics of best bid
+      example:
+        high: high
+        low: low
+        changes: 0
+        close: close
+        open: open
+      properties:
+        changes:
+          description: The number of times the best price changes within the window
+          format: int64
+          type: integer
+        open:
+          type: string
+        high:
+          type: string
+        low:
+          type: string
+        close:
+          type: string
+      required:
+      - changes
+      - close
+      - high
+      - low
+      - open
+      type: object
+    ObMetricsDto:
+      description: Metrics associated with object
+      example:
+        bestAsk:
+          high: high
+          low: low
+          changes: 0
+          close: close
+          open: open
+        vwmp: vwmp
+        bestBid:
+          high: high
+          low: low
+          changes: 0
+          close: close
+          open: open
+      properties:
+        bestAsk:
+          $ref: '#/components/schemas/BestOfferDto'
+        bestBid:
+          $ref: '#/components/schemas/BestOfferDto'
+        vwmp:
+          type: string
+      required:
+      - vwmp
+      type: object
+    ObPairDto:
+      description: Dictionary elements
+      example:
+        lastSeen: lastSeen
+        firstSeen: firstSeen
+        active: true
+        metrics:
+          key:
+            bestAsk:
+              high: high
+              low: low
+              changes: 0
+              close: close
+              open: open
+            vwmp: vwmp
+            bestBid:
+              high: high
+              low: low
+              changes: 0
+              close: close
+              open: open
+        pair:
+          optionType: optionType
+          optionStrike: optionStrike
+          symbol: symbol
+          futureDeliveryDate: futureDeliveryDate
+          optionExpiration: optionExpiration
+          id: id
+          optionDeliveryDate: optionDeliveryDate
+          assetType: assetType
+          base: base
+      properties:
+        pair:
+          $ref: '#/components/schemas/PairDto'
+        active:
+          description: Shows whether the object is still active or not
+          type: boolean
+        firstSeen:
+          description: The date and time of first event with pair
+          type: string
+        lastSeen:
+          description: The date and time of last event with pair
+          type: string
+        metrics:
+          additionalProperties:
+            $ref: '#/components/schemas/ObMetricsDto'
+          description: Metrics associated with object
+          type: object
+      required:
+      - pair
+      type: object
+    PageWrapperObPairDto:
+      example:
+        size: 6
+        numberOfElements: 5
+        totalPages: 1
+        hasNext: true
+        page: 2
+        content:
+        - lastSeen: lastSeen
+          firstSeen: firstSeen
+          active: true
+          metrics:
+            key:
+              bestAsk:
+                high: high
+                low: low
+                changes: 0
+                close: close
+                open: open
+              vwmp: vwmp
+              bestBid:
+                high: high
+                low: low
+                changes: 0
+                close: close
+                open: open
+          pair:
+            optionType: optionType
+            optionStrike: optionStrike
+            symbol: symbol
+            futureDeliveryDate: futureDeliveryDate
+            optionExpiration: optionExpiration
+            id: id
+            optionDeliveryDate: optionDeliveryDate
+            assetType: assetType
+            base: base
+        - lastSeen: lastSeen
+          firstSeen: firstSeen
+          active: true
+          metrics:
+            key:
+              bestAsk:
+                high: high
+                low: low
+                changes: 0
+                close: close
+                open: open
+              vwmp: vwmp
+              bestBid:
+                high: high
+                low: low
+                changes: 0
+                close: close
+                open: open
+          pair:
+            optionType: optionType
+            optionStrike: optionStrike
+            symbol: symbol
+            futureDeliveryDate: futureDeliveryDate
+            optionExpiration: optionExpiration
+            id: id
+            optionDeliveryDate: optionDeliveryDate
+            assetType: assetType
+            base: base
+        totalElements: 5
+      properties:
+        content:
+          description: Dictionary elements
+          items:
+            $ref: '#/components/schemas/ObPairDto'
+          type: array
+        size:
+          description: Number of requested elements
+          format: int32
+          type: integer
+        totalPages:
+          description: Total pages of dictionary
+          format: int32
+          type: integer
+        totalElements:
+          description: Total elements
+          format: int64
+          type: integer
+        numberOfElements:
+          description: The number of elements on page
+          format: int32
+          type: integer
+        page:
+          description: Current page number
+          format: int32
+          type: integer
+        hasNext:
+          description: Whether it has more pages or not
+          type: boolean
+      required:
+      - content
+      - hasNext
+      - numberOfElements
+      - page
+      - size
+      - totalElements
+      - totalPages
+      type: object
+    ObMarketDto:
+      description: Dictionary elements
+      example:
+        market:
+          pairId: pairId
+          id: id
+          marketVenue: marketVenue
+          pair:
+            optionType: optionType
+            optionStrike: optionStrike
+            symbol: symbol
+            futureDeliveryDate: futureDeliveryDate
+            optionExpiration: optionExpiration
+            id: id
+            optionDeliveryDate: optionDeliveryDate
+            assetType: assetType
+            base: base
+        lastSeen: lastSeen
+        firstSeen: firstSeen
+        active: true
+        metrics:
+          key:
+            bestAsk:
+              high: high
+              low: low
+              changes: 0
+              close: close
+              open: open
+            vwmp: vwmp
+            bestBid:
+              high: high
+              low: low
+              changes: 0
+              close: close
+              open: open
+      properties:
+        market:
+          $ref: '#/components/schemas/MarketDto'
+        active:
+          description: Shows whether the object is still active or not
+          type: boolean
+        firstSeen:
+          description: The date and time of first event on market
+          type: string
+        lastSeen:
+          description: The date and time of last event on market
+          type: string
+        metrics:
+          additionalProperties:
+            $ref: '#/components/schemas/ObMetricsDto'
+          description: Metrics associated with object
+          type: object
+      required:
+      - active
+      - market
+      type: object
+    PageWrapperObMarketDto:
+      example:
+        size: 0
+        numberOfElements: 5
+        totalPages: 6
+        hasNext: true
+        page: 5
+        content:
+        - market:
+            pairId: pairId
+            id: id
+            marketVenue: marketVenue
+            pair:
+              optionType: optionType
+              optionStrike: optionStrike
+              symbol: symbol
+              futureDeliveryDate: futureDeliveryDate
+              optionExpiration: optionExpiration
+              id: id
+              optionDeliveryDate: optionDeliveryDate
+              assetType: assetType
+              base: base
+          lastSeen: lastSeen
+          firstSeen: firstSeen
+          active: true
+          metrics:
+            key:
+              bestAsk:
+                high: high
+                low: low
+                changes: 0
+                close: close
+                open: open
+              vwmp: vwmp
+              bestBid:
+                high: high
+                low: low
+                changes: 0
+                close: close
+                open: open
+        - market:
+            pairId: pairId
+            id: id
+            marketVenue: marketVenue
+            pair:
+              optionType: optionType
+              optionStrike: optionStrike
+              symbol: symbol
+              futureDeliveryDate: futureDeliveryDate
+              optionExpiration: optionExpiration
+              id: id
+              optionDeliveryDate: optionDeliveryDate
+              assetType: assetType
+              base: base
+          lastSeen: lastSeen
+          firstSeen: firstSeen
+          active: true
+          metrics:
+            key:
+              bestAsk:
+                high: high
+                low: low
+                changes: 0
+                close: close
+                open: open
+              vwmp: vwmp
+              bestBid:
+                high: high
+                low: low
+                changes: 0
+                close: close
+                open: open
+        totalElements: 1
+      properties:
+        content:
+          description: Dictionary elements
+          items:
+            $ref: '#/components/schemas/ObMarketDto'
+          type: array
+        size:
+          description: Number of requested elements
+          format: int32
+          type: integer
+        totalPages:
+          description: Total pages of dictionary
+          format: int32
+          type: integer
+        totalElements:
+          description: Total elements
+          format: int64
+          type: integer
+        numberOfElements:
+          description: The number of elements on page
+          format: int32
+          type: integer
+        page:
+          description: Current page number
+          format: int32
+          type: integer
+        hasNext:
+          description: Whether it has more pages or not
+          type: boolean
+      required:
+      - content
+      - hasNext
+      - numberOfElements
+      - page
+      - size
+      - totalElements
+      - totalPages
+      type: object
+
